@@ -55,14 +55,22 @@ public class Band {
     }
 
     public void render(Graphics2D g) {
-        g.setColor(Color.DARK_GRAY);
         var it = values.iterator();
         for (int i = 0; it.hasNext(); i++) {
             long value = it.next();
             double cx = (i - bandPointer) * (BLOCK_SIZE + BLOCK_MARGIN);
             var rect = new Rectangle2D.Double(cx - BLOCK_SIZE / 2.0, -BLOCK_SIZE / 2.0, BLOCK_SIZE, BLOCK_SIZE);
+            var upper = new Rectangle2D.Double(rect.x, rect.y, rect.width, rect.height * 0.5);
+            var lower = new Rectangle2D.Double(rect.x, rect.y + rect.height * 0.5, rect.width, rect.height * 0.5);
+
+            g.setColor(Color.DARK_GRAY);
             g.draw(rect);
-            RenderUtil.renderCenteredString(g, Long.toString(value), rect);
+            RenderUtil.renderCenteredString(g, Long.toString(value), upper);
+
+            if (value >= 32L && value <= 126) {
+                g.setColor(Color.ORANGE);
+                RenderUtil.renderCenteredString(g, "'" + (char) value + "'", lower);
+            }
         }
 
         // Render arrow

@@ -243,8 +243,9 @@ public class BfInterpreter extends JFrame implements KeyListener {
             return;
 
         char c = e.getKeyChar();
-        if (Character.isDefined(c))
+        if (Character.isDefined(c)) {
             input(c);
+        }
     }
 
     @Override

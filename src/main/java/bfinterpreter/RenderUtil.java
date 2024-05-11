@@ -5,7 +5,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 public abstract class RenderUtil {
-    public static void renderCenteredString(Graphics2D g, String text, Rectangle2D bounds) {
+    private static void renderCenteredLine(Graphics2D g, String text, Rectangle2D bounds) {
         int minFontSize = 1;
         int maxFontSize = 100; // Set an upper limit for the font size
         int fontSize = binarySearchForFontSize(g, text, bounds, minFontSize, maxFontSize) - 1;
@@ -20,6 +20,15 @@ public abstract class RenderUtil {
 
         // Render the centered string
         g.drawString(text, (float) x, (float) y);
+    }
+
+    public static void renderCenteredString(Graphics2D g, String text, Rectangle2D bounds) {
+        String[] lines = text.split("\n");
+        double h = bounds.getHeight() / lines.length;
+        for (int i = 0; i < lines.length; i++) {
+            var rect = new Rectangle2D.Double(bounds.getX(), bounds.getY() + h * i, bounds.getWidth(), h);
+            renderCenteredLine(g, lines[i], rect);
+        }
     }
 
     private static int binarySearchForFontSize(Graphics2D g, String text, Rectangle2D bounds, int minFontSize, int maxFontSize) {
